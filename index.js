@@ -1,22 +1,68 @@
 const app = require("express")();
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const http = require("http").createServer(app);
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "*",
+  },
+});
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+const SOCKET_PORT = process.env.PORT || 3005;
+let connectedUsers = 0;
+
 io.on("connection", (socket) => {
-  console.log("user connected");
-  socket.on('chat message', (msg)=> {
-    console.log(msg);
+  console.log("first time",connectedUsers);
+
+  if (connectedUsers >= 2) {
+    console.log("returning rfom here");
+    return null;
+  }
+
+  console.log("one of the users");
+  connectedUsers += 1;
+  console.log(connectedUsers);
+
+  if (connectedUsers === 1) {
+    socket.emit("setPlayerTwo");
+  }
+
+  function getInitialNumber() {
+    let randomNumber = parseInt(Math.random() * 100, 10);
+    if (randomNumber < 2) this.getInitialNumber();
+    else return randomNumber;
+  }
+
+  if (connectedUsers === 2) {
+    console.log(connectedUsers);
+    socket.emit("setPlayerOne");
+
+    io.emit("action", {
+      isGameStart: true,
+      turnArray: [
+        {
+          id: 0,
+          player: "playerOne",
+          value: getInitialNumber(),
+        },
+      ],
+      turnCount: 0,
+    });
+  }
+
+  socket.on("action", (action) => {
+    io.emit("action", action);
   });
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
+  socket.on("disconnect", () => {
+    connectedUsers -= 1;
+    console.log("user disconnected");
+    console.log(connectedUsers);
   });
 });
 
-http.listen(3005, () => {
-  console.log("listening on *:3000");
+http.listen(SOCKET_PORT, () => {
+  console.log("listening on *:" + SOCKET_PORT);
 });
