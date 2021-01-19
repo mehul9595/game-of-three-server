@@ -29,9 +29,9 @@ io.on("connection", (socket) => {
     socket.emit("setPlayerTwo");
   }
 
-  function getInitialNumber() {
+  function getGameRandomNumber() {
     let randomNumber = parseInt(Math.random() * 100, 10);
-    if (randomNumber < 2) this.getInitialNumber();
+    if (randomNumber < 2) this.getGameRandomNumber();
     else return randomNumber;
   }
 
@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
         {
           id: 0,
           player: "playerOne",
-          value: getInitialNumber(),
+          value: getGameRandomNumber(),
         },
       ],
       turnCount: 0,
