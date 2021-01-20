@@ -7,6 +7,8 @@ This is the simple NodeJS API backend for multiplayer version of [Game of Three 
 
 - The server is hosted on [Azure.](https://game-of-three-server.azurewebsites.net)
 - [Live Game](https://game-of-three.azurewebsites.net)
+- [CDN Site](https://game-of-three.azureedge.net)
 
-### Note
-Server is running on limited usage upto 60 mins/day, in case game does not start for long time, visit the server URL https://game-of-three-server.azurewebsites.net/ to warm up the server manually. 
+## Note
+
+Server is running on limited usage upto 60 mins/day, in case game does not start for long time, visit the server URL [here](https://game-of-three-server.azurewebsites.net/) to warm up the server manually.
